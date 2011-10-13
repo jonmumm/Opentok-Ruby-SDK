@@ -1,0 +1,46 @@
+= OpenTok
+
+== DESCRIPTION:
+
+This is a ruby implementation of the OpenTok API.
+
+== FEATURES/PROBLEMS:
+
+* Features currently available:
+
+  * Create a token for authenticating the JS API
+
+  * Generate a new session ID
+
+== SYNOPSIS:
+
+  # To create an instance of the API object:
+
+    o = OpenTokSDK.new(1,'322fddd07b3f16bcd516adc398dc1f7465e0b4fa')
+
+  # To create a token using that instance
+
+    print o.validate_token(o.generate_token()).body
+
+  # To generate a session ID using that instance
+
+    puts o.create_session('127.0.0.1',{'echoSuppression.enabled' => 'true'}).body
+
+== REQUIREMENTS:
+
+* xml-simple
+* A partner key and a partner secret on the OpenTok API (you can get those here: http://www.opentokbox.com/)
+
+== INSTALL:
+
+
+== LICENSE:
+
+OpenTok Ruby Library 0.9
+http://www.opentok.com/
+
+Copyright 2010, TokBox, Inc.
+Dual licensed under the MIT or GPL Version 2 licenses.
+http://www.tokbox.com/license
+
+Date: 2010-11-07

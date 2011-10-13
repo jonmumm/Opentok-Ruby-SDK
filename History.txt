@@ -1,0 +1,3 @@
+== 0.90.0 2010-11-08
+
+* Initial release of the OpenTok Ruby server-side API

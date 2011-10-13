@@ -1,0 +1,8 @@
+History.txt
+Manifest.txt
+README.rdoc
+Rakefile
+lib/OpenTok/OpenTokSDK.rb
+lib/OpenTok/Exceptions.rb
+lib/open_tok.rb
+opentok.gemspec
