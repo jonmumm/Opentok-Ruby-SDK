@@ -21,8 +21,7 @@ require 'cgi'
 Net::HTTP.version_1_2 # to make sure version 1.2 is used
 
 module OpenTok
-  VERSION = "tbrb-@sdk_version@.@opentok.sdk.ruby.mod_time@"
-  API_URL = "@staging.api.url@"
+  API_URL = "http://webqa203-iad.tokbox.com/hl"
   #Uncomment this line when you launch your app
   #API_URL = "@production.api.url@";
 end

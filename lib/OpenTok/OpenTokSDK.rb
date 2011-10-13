@@ -77,7 +77,6 @@ module OpenTok
   class OpenTokSDK
     attr_writer :api_url
     @@TOKEN_SENTINEL = "T1=="
-    @@SDK_VERSION = "tbruby-%s" % [ VERSION ]
 
     # @@API_URL = API_URL
 
@@ -94,6 +93,13 @@ module OpenTok
       session_id = opts[:session_id].nil? ? '' : opts[:session_id]
       role = opts[:role].nil? ? RoleConstants::PUBLISHER : opts[:role]
 
+      if role != RoleConstants::SUBSCRIBER and \
+          role != RoleConstants::PUBLISHER and \
+          role != RoleConstants::MODERATOR
+        raise OpenTokException.new "'#{role}' is not a recognized role"
+      end
+
+
       data_params = {
         :role => role,
         :session_id => session_id,
@@ -102,10 +108,14 @@ module OpenTok
       }
 
       if not opts[:expire_time].nil?
+        raise OpenTokException.new 'Expire time must be a number' if not opts[:expire_time].is_a?(Numeric)
+        raise OpenTokException.new 'Expire time must be in the future' if opts[:expire_time] < Time.now.to_i
+        raise OpenTokException.new 'Expire time must be in the next 7 days' if opts[:expire_time] > (Time.now.to_i + 604800)
         data_params[:expire_time] = opts[:expire_time].to_i
       end
       
       if not opts[:connection_data].nil?
+        raise OpenTokException.new 'Connection data must be less than 1000 characters' if opts[:connection_data].length > 1000
         data_params[:connection_data] = opts[:connection_data]
       end
 
@@ -114,7 +124,6 @@ module OpenTok
       sig = sign_string(data_string, @partner_secret)
       meta_string = {
         :partner_id => @partner_id,
-        :sdk_version => @@SDK_VERSION,
         :sig => sig
       }.urlencode
 

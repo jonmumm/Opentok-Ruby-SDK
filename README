@@ -18,13 +18,13 @@ This is a ruby implementation of the OpenTok API.
 
     o = OpenTokSDK.new(1,'322fddd07b3f16bcd516adc398dc1f7465e0b4fa')
 
+  # To generate a session ID using that instance:
+
+    puts o.create_session('127.0.0.1',{'echoSuppression.enabled' => 'true'}).session_id
+
   # To create a token using that instance
 
-    print o.validate_token(o.generate_token()).body
-
-  # To generate a session ID using that instance
-
-    puts o.create_session('127.0.0.1',{'echoSuppression.enabled' => 'true'}).body
+    print o.generate_token(session_id)
 
 == REQUIREMENTS:
 
