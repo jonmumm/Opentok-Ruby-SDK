@@ -5,8 +5,8 @@ require "lib/open_tok"
 class TestRubySDK < Test::Unit::TestCase
 
     def setup
-        @api_key = 4317
-        @api_secret = "91e6f7609074be23b40747a4651ba5a7"
+        @api_key = -1
+        @api_secret = ""
         @o = OpenTok::OpenTokSDK.new @api_key, @api_secret
         @api_url = OpenTok::API_URL
     end

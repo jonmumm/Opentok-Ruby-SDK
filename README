@@ -34,6 +34,10 @@ This is a ruby implementation of the OpenTok API.
 == INSTALL:
 
 
+== Testing
+
+To run the unit test, put your api key and secret in the variables at the beginning of the file and run "ruby test.rb".
+
 == LICENSE:
 
 OpenTok Ruby Library 0.9
