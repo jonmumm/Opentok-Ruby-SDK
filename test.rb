@@ -244,7 +244,7 @@ class TestRubySDK < Test::Unit::TestCase
         }
 
         # garbage data
-        assert_raise(OpenTok::OpenTokException, 'Ruby SDK tests: expire time more than 7 days away should be rejected') {
+        assert_raise(OpenTok::OpenTokException, 'Ruby SDK tests: non-numeric expire time should be rejected') {
             t = @o.generate_token :session_id => s.session_id, :expire_time => "asdfasdf"
         }
     end
