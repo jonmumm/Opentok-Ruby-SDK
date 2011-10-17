@@ -90,14 +90,14 @@ class TestRubySDK < Test::Unit::TestCase
     end
 
     def test_p2p_preference
-        s = @o.create_session '127.0.0.1', properties = OpenTok::SessionPropertyConstants::P2P_PREFERENCE => 'enable'
+        s = @o.create_session '127.0.0.1', properties = OpenTok::SessionPropertyConstants::P2P_PREFERENCE => 'enabled'
         xml = get_session_info s.session_id
-        assert_equal 'enable', xml.root.elements['Session/properties/p2p/preference'][0].to_s, \
+        assert_equal 'enabled', xml.root.elements['Session/properties/p2p/preference'][0].to_s, \
             'Ruby SDK tests: multiplexer.p2p_preference not enabled'
 
-        s = @o.create_session '127.0.0.1', properties = OpenTok::SessionPropertyConstants::P2P_PREFERENCE => 'disable'
+        s = @o.create_session '127.0.0.1', properties = OpenTok::SessionPropertyConstants::P2P_PREFERENCE => 'disabled'
         xml = get_session_info s.session_id
-        assert_equal 'disable', xml.root.elements['Session/properties/p2p/preference'][0].to_s, \
+        assert_equal 'disabled', xml.root.elements['Session/properties/p2p/preference'][0].to_s, \
             'Ruby SDK tests: multiplexer.p2p_preference not disabled'
     end
     
