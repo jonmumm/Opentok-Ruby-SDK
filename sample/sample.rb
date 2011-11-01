@@ -6,7 +6,7 @@ class SampleController < ApplicationController
         opentok = OpenTok::OpenTokSDK.new api_key, api_secret
         session = opentok.create_session request.remote_addr
 
-        token = opentok.generate_token :session_id => session, :role => OpenTok::RoleConstants.PUBLISHER, :connection_data => "username=Bob, level=4"
+        token = opentok.generate_token :session_id => session, :role => OpenTok::RoleConstants::PUBLISHER, :connection_data => "username=Bob, level=4"
         
         puts session.session_id
         puts token
