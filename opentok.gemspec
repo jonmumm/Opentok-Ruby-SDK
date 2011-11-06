@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = %q{The ruby implementation of the OpenTok API server-side API}
   s.email = ["melih@tokbox.com"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "README.rdoc"]
-  s.files = ["History.txt", "Manifest.txt", "README.rdoc", "Rakefile", "lib/OpenTok/OpenTokSDK.rb", "lib/OpenTok/Exceptions.rb", "lib/open_tok.rb", "tokboxer.gemspec"]
+  s.files = ["History.txt", "Manifest.txt", "README.rdoc", "Rakefile", "lib/OpenTok/OpenTokSDK.rb", "lib/OpenTok/Exceptions.rb", "lib/open_tok.rb", "opentok.gemspec"]
   s.has_rdoc = true
   s.homepage = %q{http://www.opentok.com}
   s.rdoc_options = ["--main", "README.rdoc"]
