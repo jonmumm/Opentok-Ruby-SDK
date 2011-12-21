@@ -37,10 +37,10 @@ module OpenTok
 
   class SessionPropertyConstants
     ECHOSUPPRESSION_ENABLED = "echoSuppression.enabled"; #Boolean
-	MULTIPLEXER_NUMOUTPUTSTREAMS = "multiplexer.numOutputStreams"; #Integer
-	MULTIPLEXER_SWITCHTYPE = "multiplexer.switchType"; #Integer
-	MULTIPLEXER_SWITCHTIMEOUT = "multiplexer.switchTimeout"; #Integer
-	P2P_PREFERENCE = "p2p.preference"; #String
+    MULTIPLEXER_NUMOUTPUTSTREAMS = "multiplexer.numOutputStreams"; #Integer
+    MULTIPLEXER_SWITCHTYPE = "multiplexer.switchType"; #Integer
+    MULTIPLEXER_SWITCHTIMEOUT = "multiplexer.switchTimeout"; #Integer
+    P2P_PREFERENCE = "p2p.preference"; #String
   end
 
   class RoleConstants
@@ -74,6 +74,67 @@ module OpenTok
     end
   end
 
+  class OpenTokArchive
+    attr_accessor :archive_id, :archive_title, :resources, :timeline
+
+    def initialize(archive_id, archive_title, resources, timeline)
+      @archive_id = archive_id
+      @archive_title = archive_title
+      @resources = resources
+      @timeline = timeline
+    end
+
+    def download_archive_url(video_id)
+      "#{API_URL}/archive/url/#{@archive_id}/#{video_id}" 
+    end
+
+    def self.parse_manifest(manifest)
+      archive_id = manifest.attributes['archiveid']
+      archive_title = manifest.attributes['title']
+
+      resources = []
+      manifest.get_elements("resources")[0].get_elements("video").each do |video|
+        resources << OpenTokArchiveVideoResource.parseXML(video)
+      end
+
+      timeline = []
+      manifest.get_elements("timeline")[0].get_elements("event").each do |event|
+        timeline << OpenTokArchiveTimelineEvent.parseXML(event)
+      end
+
+      OpenTokArchive.new(archive_id, archive_title, resources, timeline)
+    end
+  end
+
+  class OpenTokArchiveVideoResource
+    attr_reader :type
+    attr_accessor :id, :length
+
+    def initialize(id, length)
+      @id = id
+      @type = "video"
+      @length = length
+    end
+
+    def self.parseXML(video_resource_item)
+      OpenTokArchiveVideoResource.new(video_resource_item.attributes['id'], video_resource_item.attributes['length'])
+    end
+  end
+
+  class OpenTokArchiveTimelineEvent
+    attr_accessor :event_type, :resource_id, :offset
+    
+    def initialize(event_type, resource_id, offset)
+      @event_type = event_type
+      @resource_id = resource_id
+      @offset = offset
+    end
+
+    def self.parseXML(timeline_item)
+      OpenTokArchiveTimelineEvent.new(timeline_item.attributes['type'], timeline_item.attributes['id'], timeline_item.attributes['offset'])
+    end
+  end
+
   class OpenTokSDK
     attr_writer :api_url
     @@TOKEN_SENTINEL = "T1=="
@@ -94,8 +155,8 @@ module OpenTok
       role = opts[:role].nil? ? RoleConstants::PUBLISHER : opts[:role]
 
       if role != RoleConstants::SUBSCRIBER and \
-          role != RoleConstants::PUBLISHER and \
-          role != RoleConstants::MODERATOR
+        role != RoleConstants::PUBLISHER and \
+        role != RoleConstants::MODERATOR
         raise OpenTokException.new "'#{role}' is not a recognized role"
       end
 
@@ -113,7 +174,7 @@ module OpenTok
         raise OpenTokException.new 'Expire time must be in the next 7 days' if opts[:expire_time] > (Time.now.to_i + 604800)
         data_params[:expire_time] = opts[:expire_time].to_i
       end
-      
+
       if not opts[:connection_data].nil?
         raise OpenTokException.new 'Connection data must be less than 1000 characters' if opts[:connection_data].length > 1000
         data_params[:connection_data] = opts[:connection_data]
@@ -137,6 +198,14 @@ module OpenTok
         raise OpenTokException.new doc.get_elements('Errors')[0].get_elements('error')[0].children.to_s
       end
       OpenTokSession.new(doc.root.get_elements('Session')[0].get_elements('session_id')[0].children[0].to_s)
+    end
+
+    def get_archive_manifest(archive_id, token)
+      doc = do_request("/archive/getmanifest/#{archive_id}", {}, token)
+      if not doc.get_elements('Errors').empty?
+        raise OpenTokException.new doc.get_elements('Errors')[0].get_elements('error')[0].children.to_s
+      end
+      OpenTokArchive.parse_manifest(doc.get_elements('manifest')[0])
     end
 
     protected
